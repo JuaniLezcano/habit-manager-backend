@@ -1,22 +1,36 @@
-const Habit = require('../models/habit');
-const User = require('../models/user');
+const Habit = require("../models/habit");
+const User = require("../models/user");
 
 // Crear un nuevo hábito
 exports.createHabit = async (req, res) => {
   try {
-    const { userId, titulo, descripcion, importancia } = req.body;
-    
+    const { userId, title, description, importance } = req.body;
+
     // Verifica que el usuario exista
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
     // Crea el hábito
-    const habit = await Habit.create({ userId, titulo, descripcion, importancia });
+    const habit = await Habit.create({
+      userId,
+      title,
+      description,
+      importance,
+    });
     res.status(201).json(habit);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      error: error.message,
+      expectedParameters: {
+        userId: "number",
+        titulo: "string",
+        descripcion: "string",
+        importancia: "number",
+      },
+      receivedData: req.body,
+    });
   }
 };
 
@@ -40,13 +54,16 @@ exports.updateHabit = async (req, res) => {
     const { titulo, descripcion, importancia } = req.body;
 
     // Busca el hábito a actualizar
-    const [updated] = await Habit.update({ titulo, descripcion, importancia }, { where: { id } });
-    
+    const [updated] = await Habit.update(
+      { titulo, descripcion, importancia },
+      { where: { id } }
+    );
+
     if (updated) {
       const updatedHabit = await Habit.findByPk(id);
       res.json(updatedHabit);
     } else {
-      res.status(404).json({ message: 'Hábito no encontrado' });
+      res.status(404).json({ message: "Hábito no encontrado" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -60,11 +77,11 @@ exports.deleteHabit = async (req, res) => {
 
     // Elimina el hábito
     const deleted = await Habit.destroy({ where: { id } });
-    
+
     if (deleted) {
-      res.status(204).json({ message: 'Hábito eliminado' });
+      res.status(204).json({ message: "Hábito eliminado" });
     } else {
-      res.status(404).json({ message: 'Hábito no encontrado' });
+      res.status(404).json({ message: "Hábito no encontrado" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
