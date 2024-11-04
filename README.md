@@ -55,8 +55,3 @@ Es un backend hecho con **Node.js**, **Express** y **Sequelize** usando **SQLite
     - *PUT /api/habits/id*: Actualiza datos de un hábito
         - Body: { "titulo": "nuevo_titulo", "descripcion": "nueva_descripcion", "importancia": "Alta/Media/Baja" }
     - *DELETE /api/habits/id*: Elimina un hábito específico.
-
-**Tecnologias**
-- Node.js y Express para el servidor y la API.
-- Sequelize como ORM.
-- SQLite como base de datos.
