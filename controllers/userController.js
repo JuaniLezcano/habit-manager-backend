@@ -3,6 +3,9 @@ const User = require('../models/user');
 // Crear usuario
 exports.createUser = async (req, res) => {
   try {
+    if (!auth0Instance || auth0Instance.isLoading || !auth0Instance.hasValidCredentials()) {
+      return res.status(500).json({ message: 'Auth0 instance is not valid or still loading' });
+    }
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
